@@ -1,0 +1,67 @@
+server_id = "mcp_payments"
+display_name = "Payments"
+version = "1.0.0"
+domain = "finance"
+sdk_version = "0.1.0"
+risk_level = "high"
+writes_allowed = "gated"
+transports = ["stdio"]
+credentials = ["vault://stripe-secret-key"]
+governance_gates = []
+environments = ["development", "staging", "production"]
+
+[[tools]]
+name = "list_customers"
+description = "List Stripe customers"
+risk_class = "read_only"
+requires_approval = false
+credential_bindings = ["vault://stripe-secret-key"]
+
+[[tools]]
+name = "get_customer"
+description = "Get a Stripe customer by ID"
+risk_class = "read_only"
+requires_approval = false
+credential_bindings = ["vault://stripe-secret-key"]
+
+[[tools]]
+name = "create_payment_intent"
+description = "Create a Stripe payment intent"
+risk_class = "external_write"
+requires_approval = true
+credential_bindings = ["vault://stripe-secret-key"]
+
+[[tools]]
+name = "list_payment_intents"
+description = "List Stripe payment intents"
+risk_class = "read_only"
+requires_approval = false
+credential_bindings = ["vault://stripe-secret-key"]
+
+[[tools]]
+name = "get_payment_intent"
+description = "Get a Stripe payment intent by ID"
+risk_class = "read_only"
+requires_approval = false
+credential_bindings = ["vault://stripe-secret-key"]
+
+[[tools]]
+name = "list_invoices"
+description = "List Stripe invoices"
+risk_class = "read_only"
+requires_approval = false
+credential_bindings = ["vault://stripe-secret-key"]
+
+[[tools]]
+name = "create_refund"
+description = "Create a refund for a payment intent"
+risk_class = "external_write"
+requires_approval = true
+credential_bindings = ["vault://stripe-secret-key"]
+
+[[tools]]
+name = "get_balance"
+description = "Get Stripe account balance"
+risk_class = "read_only"
+requires_approval = false
+credential_bindings = ["vault://stripe-secret-key"]

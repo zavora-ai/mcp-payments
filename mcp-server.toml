@@ -1,67 +1,61 @@
-server_id = "mcp_payments"
-display_name = "Payments"
-version = "1.0.0"
-domain = "finance"
-sdk_version = "0.1.0"
-risk_level = "high"
-writes_allowed = "gated"
-transports = ["stdio"]
-credentials = ["vault://stripe-secret-key"]
-governance_gates = []
-environments = ["development", "staging", "production"]
+[server]
+name = "mcp-payments"
+version = "2.0.0"
+description = "Governed Payment Operations MCP — payment intents, approval gates, evidence, reconciliation, and audit for AI agents"
+authors = ["James Karanja <james.karanja@zavora.ai>"]
+license = "Apache-2.0"
+repository = "https://github.com/zavora-ai/mcp-payments"
+
+[registry]
+category = "finance"
+tags = ["payments", "commerce", "governance", "enterprise", "audit"]
 
 [[tools]]
-name = "list_customers"
-description = "List Stripe customers"
+name = "lookup_payment"
+description = "Look up a payment intent by ID"
 risk_class = "read_only"
-requires_approval = false
-credential_bindings = ["vault://stripe-secret-key"]
 
 [[tools]]
-name = "get_customer"
-description = "Get a Stripe customer by ID"
+name = "list_customer_payments"
+description = "List all payments for a customer"
 risk_class = "read_only"
-requires_approval = false
-credential_bindings = ["vault://stripe-secret-key"]
 
 [[tools]]
-name = "create_payment_intent"
-description = "Create a Stripe payment intent"
-risk_class = "external_write"
-requires_approval = true
-credential_bindings = ["vault://stripe-secret-key"]
-
-[[tools]]
-name = "list_payment_intents"
-description = "List Stripe payment intents"
+name = "get_payment_status"
+description = "Get the current status of a payment intent"
 risk_class = "read_only"
-requires_approval = false
-credential_bindings = ["vault://stripe-secret-key"]
 
 [[tools]]
-name = "get_payment_intent"
-description = "Get a Stripe payment intent by ID"
-risk_class = "read_only"
-requires_approval = false
-credential_bindings = ["vault://stripe-secret-key"]
+name = "create_checkout_intent"
+description = "Create a checkout payment intent (Draft). Amounts > 10000 minor units require approval."
+risk_class = "internal_write"
 
 [[tools]]
-name = "list_invoices"
-description = "List Stripe invoices"
-risk_class = "read_only"
-requires_approval = false
-credential_bindings = ["vault://stripe-secret-key"]
+name = "create_refund_intent"
+description = "Create a refund intent for an existing payment. Direction=Outbound."
+risk_class = "financial_action"
 
 [[tools]]
-name = "create_refund"
-description = "Create a refund for a payment intent"
-risk_class = "external_write"
-requires_approval = true
-credential_bindings = ["vault://stripe-secret-key"]
+name = "create_payout_intent"
+description = "Create a payout intent. Direction=Outbound. Always requires approval."
+risk_class = "financial_action"
 
 [[tools]]
-name = "get_balance"
-description = "Get Stripe account balance"
-risk_class = "read_only"
-requires_approval = false
-credential_bindings = ["vault://stripe-secret-key"]
+name = "request_payment_approval"
+description = "Request approval for a Draft payment intent. Moves Draft → PendingApproval."
+risk_class = "internal_write"
+
+[[tools]]
+name = "execute_approved_intent"
+description = "Execute an approved payment intent. ONLY works if status=Approved."
+risk_class = "financial_action"
+
+[[tools]]
+name = "reconcile_payment"
+description = "Reconcile a payment against an order/invoice reference."
+risk_class = "internal_write"
+
+[[tools]]
+name = "attach_payment_evidence"
+description = "Attach evidence artifact to a payment intent for audit trail."
+risk_class = "internal_write"

@@ -1,5 +1,5 @@
 use rmcp::{handler::server::wrapper::Parameters, schemars, tool, tool_router};
-use rmcp::model::{CallToolResult, Content};
+use rmcp::model::{CallToolResult, ContentBlock};
 
 #[allow(unused_imports)]
 use crate::domain::*;
@@ -100,11 +100,11 @@ fn now() -> String { chrono::Utc::now().to_rfc3339() }
 fn new_id() -> String { uuid::Uuid::new_v4().to_string() }
 
 fn ok_json(v: &impl serde::Serialize) -> Result<CallToolResult, rmcp::ErrorData> {
-    Ok(CallToolResult::success(vec![Content::text(serde_json::to_string_pretty(v).unwrap())]))
+    Ok(CallToolResult::success(vec![ContentBlock::text(serde_json::to_string_pretty(v).unwrap())]))
 }
 
 fn err_result(msg: &str) -> Result<CallToolResult, rmcp::ErrorData> {
-    Ok(CallToolResult::error(vec![Content::text(msg)]))
+    Ok(CallToolResult::error(vec![ContentBlock::text(msg)]))
 }
 
 #[tool_router(server_handler)]

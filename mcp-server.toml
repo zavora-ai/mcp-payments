@@ -1,61 +1,81 @@
-[server]
-name = "mcp-payments"
+server_id = "mcp_payments"
+display_name = "Payments"
 version = "2.0.0"
-description = "Governed Payment Operations MCP — payment intents, approval gates, evidence, reconciliation, and audit for AI agents"
-authors = ["James Karanja <james.karanja@zavora.ai>"]
-license = "Apache-2.0"
-repository = "https://github.com/zavora-ai/mcp-payments"
-
-[registry]
-category = "finance"
-tags = ["payments", "commerce", "governance", "enterprise", "audit"]
+domain = "payments"
+sdk_version = "0.2.0"
+risk_level = "critical"
+writes_allowed = "gated"
+transports = ["stdio"]
+credentials = []
+governance_gates = ["mrtr_approval"]
+environments = ["development", "staging", "production"]
 
 [[tools]]
 name = "lookup_payment"
 description = "Look up a payment intent by ID"
 risk_class = "read_only"
+requires_approval = false
+credential_bindings = []
 
 [[tools]]
 name = "list_customer_payments"
 description = "List all payments for a customer"
 risk_class = "read_only"
+requires_approval = false
+credential_bindings = []
 
 [[tools]]
 name = "get_payment_status"
 description = "Get the current status of a payment intent"
 risk_class = "read_only"
+requires_approval = false
+credential_bindings = []
 
 [[tools]]
 name = "create_checkout_intent"
 description = "Create a checkout payment intent (Draft). Amounts > 10000 minor units require approval."
 risk_class = "internal_write"
+requires_approval = true
+credential_bindings = []
 
 [[tools]]
 name = "create_refund_intent"
 description = "Create a refund intent for an existing payment. Direction=Outbound."
 risk_class = "financial_action"
+requires_approval = true
+credential_bindings = []
 
 [[tools]]
 name = "create_payout_intent"
 description = "Create a payout intent. Direction=Outbound. Always requires approval."
 risk_class = "financial_action"
+requires_approval = true
+credential_bindings = []
 
 [[tools]]
 name = "request_payment_approval"
 description = "Request approval for a Draft payment intent. Moves Draft → PendingApproval."
 risk_class = "internal_write"
+requires_approval = true
+credential_bindings = []
 
 [[tools]]
 name = "execute_approved_intent"
-description = "Execute an approved payment intent. ONLY works if status=Approved."
+description = "Execute an approved payment intent. ONLY works if status=Approved. Moves Approved → Executing → Captured."
 risk_class = "financial_action"
+requires_approval = true
+credential_bindings = []
 
 [[tools]]
 name = "reconcile_payment"
-description = "Reconcile a payment against an order/invoice reference."
+description = "Reconcile a payment against an order/invoice reference. Updates reconciliation status."
 risk_class = "internal_write"
+requires_approval = true
+credential_bindings = []
 
 [[tools]]
 name = "attach_payment_evidence"
 description = "Attach evidence artifact to a payment intent for audit trail."
 risk_class = "internal_write"
+requires_approval = true
+credential_bindings = []

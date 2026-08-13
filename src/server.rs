@@ -107,7 +107,7 @@ fn err_result(msg: &str) -> Result<CallToolResult, rmcp::ErrorData> {
     Ok(CallToolResult::error(vec![ContentBlock::text(msg)]))
 }
 
-#[tool_router(server_handler)]
+#[tool_router]
 impl PaymentServer {
     #[tool(description = "Look up a payment intent by ID")]
     async fn lookup_payment(&self, Parameters(input): Parameters<LookupPaymentInput>) -> Result<CallToolResult, rmcp::ErrorData> {
@@ -283,4 +283,11 @@ impl PaymentServer {
         self.store.update(&input.payment_id, intent).await;
         ok_json(&artifact)
     }
+}
+
+adk_mcp_sdk::mcp_2026_server! {
+    server: PaymentServer,
+    task_tools: ["execute_approved_intent", "reconcile_payment"],
+    approval_tools: ["create_checkout_intent", "create_refund_intent", "create_payout_intent", "request_payment_approval", "execute_approved_intent", "reconcile_payment", "attach_payment_evidence"],
+    cache_ttl_ms: 60_000,
 }

@@ -1,6 +1,6 @@
 server_id = "mcp_payments"
 display_name = "Payments"
-version = "2.0.0"
+version = "2.1.0"
 domain = "payments"
 sdk_version = "0.2.0"
 risk_level = "critical"

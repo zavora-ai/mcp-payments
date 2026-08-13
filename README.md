@@ -254,7 +254,7 @@ Add to `.cursor/mcp.json`:
 ```toml
 [server]
 name = "mcp-payments"
-version = "2.0.0"
+version = "2.1.0"
 description = "Governed Payment Operations MCP"
 category = "finance"
 risk_level = "high"
